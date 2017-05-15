@@ -92,7 +92,7 @@
   function populateMatchesList(words) {
     if(words.length < 1) {
       matchesList.appendChild(
-        createListItemWithText("No matches found.")
+        createListItemWithText("No rhymonyms found, sorry.")
       )
     }
     words.forEach(word => {

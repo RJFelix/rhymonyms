@@ -5,6 +5,10 @@
   const submitButton = document.getElementById("submit");
   const matchesList = document.getElementById("matches");
 
+  // super unsafe!
+  // to make it safe we'd have to build a simple backend
+  // to proxy our request to the BigHugeLabs thesaurus API
+  // (no credit card is required to use their free tier so harm is limited)
   const BHL_API_KEY = "06a3f8e208a7b89744617022241cbd06";
 
   // validation: must contain exactly one word, no whitespace
@@ -22,7 +26,7 @@
        .then(response => {
          if(response.ok) {
            return response.json();
-         } else if (response.status === 303) { // alternate word
+         } else if (response.status === 303) { // alternate word, per API documentation
            return fetch(`http://words.bighugelabs.com/api/2/${BHL_API_KEY}/${response.statusText}`)
                    .then(response => response.json());
          } else {
@@ -107,6 +111,8 @@
               .then(wordsInCommon => populateMatchesList(wordsInCommon))
               .catch(reason => alert(reason));
               // TODO: handle failure gracefully
+    } else {
+      // TODO: feedback to user
     }
   }
 

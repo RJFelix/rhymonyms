@@ -30,7 +30,6 @@
          }
        })
        .then(result => {
-         console.log(JSON.stringify(result));
          let wordList = [];
          for(partOfSpeech in result) {
            // ignore part of speech, we want all synonyms
@@ -52,7 +51,6 @@
          }
        })
        .then(results => {
-         console.log(JSON.stringify(results));
          return results.map(result => result.word);
        })
     )

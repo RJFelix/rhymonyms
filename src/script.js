@@ -34,7 +34,7 @@
          }
        })
        .then(result => {
-         let wordList = [];
+         let wordList = [word]; // words mean the same thing as themselves!
          for(partOfSpeech in result) {
            // ignore part of speech, we want all synonyms
            wordList = wordList.concat(result[partOfSpeech].syn);
@@ -55,7 +55,9 @@
          }
        })
        .then(results => {
-         return results.map(result => result.word);
+         return results.map(result => result.word)
+                       .concat(word) // words rhyme with themselves!
+         ;
        })
     )
   }

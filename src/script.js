@@ -166,6 +166,7 @@
       foundSynonymsDiv.classList.add("is-hidden");
       notFoundSynonymsDiv.classList.remove("is-hidden");
     } else {
+      foundSynonymsDiv.classList.remove("is-hidden");
       notFoundSynonymsDiv.classList.add("is-hidden");
       if(!foundSynonyms[0]) {
         matches.perfect.synonym.appendChild(createListItemWithText("(none)"));
@@ -177,6 +178,7 @@
       foundAntonymsDiv.classList.add("is-hidden");
       notFoundAntonymsDiv.classList.remove("is-hidden");
     } else {
+      foundAntonymsDiv.classList.remove("is-hidden");
       notFoundAntonymsDiv.classList.add("is-hidden");
       if(!foundAntonyms[1]) {
         matches.perfect.antonym.appendChild(createListItemWithText("(none)"));

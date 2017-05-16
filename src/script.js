@@ -38,6 +38,7 @@
          for(partOfSpeech in result) {
            // ignore part of speech, we want all synonyms
            wordList = wordList.concat(result[partOfSpeech].syn);
+           // TODO: also track antonyms
          }
          return wordList;
        })
@@ -64,6 +65,7 @@
   }
 
   // TODO: handle partial rhymes
+  // TODO: handle antonyms separately
   function findWordsInCommon(synonyms, rhymes) {
     // synonyms may be phrases, but rhymes are not
     // extract the last word of each synonym
@@ -91,7 +93,11 @@
     return li;
   }
 
-  // TODO: display partial rhymes separately
+  // TODO: display separately:
+  //       synonyms - full rhymes
+  //       synonyms - partial rhymes
+  //       antonyms - full rhymes
+  //       antonyms - partial rhymes
   function populateMatchesList(words) {
     if(words.length < 1) {
       matchesList.appendChild(

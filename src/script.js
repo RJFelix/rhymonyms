@@ -55,6 +55,7 @@
          }
        })
        .then(results => {
+         // TODO: split partial rhymes from exact rhymes
          return results.map(result => result.word)
                        .concat(word) // words rhyme with themselves!
          ;
@@ -62,6 +63,7 @@
     )
   }
 
+  // TODO: handle partial rhymes
   function findWordsInCommon(synonyms, rhymes) {
     // synonyms may be phrases, but rhymes are not
     // extract the last word of each synonym
@@ -89,6 +91,7 @@
     return li;
   }
 
+  // TODO: display partial rhymes separately
   function populateMatchesList(words) {
     if(words.length < 1) {
       matchesList.appendChild(

@@ -105,7 +105,8 @@
 
     // go back and make sure we include all
     // the matching synonyms, including phrases
-    // and also add perfect/partial rhyme info
+    // then add perfect/partial rhyme info
+    // then remove duplicates
     return synonymList.filter(synonym => wordsInCommonSet.has(/\S+$/.exec(synonym.word)[0]))
                       .map(synonym => {
                         return {
@@ -114,7 +115,15 @@
                           ).isPerfect,
                           ...synonym
                         }
-                      });
+                      })
+                      .reduce((accum, current) => {
+                        if(accum.some(syn => syn.word === current.word)) {
+                          return accum;
+                        } else {
+                          accum.push(current);
+                          return accum;
+                        }
+                      }, []);
   }
 
   const foundSynonymsDiv = document.querySelector(".synonyms .found");
@@ -183,7 +192,7 @@
     } else {
       foundAntonymsDiv.classList.remove("is-hidden");
       notFoundAntonymsDiv.classList.add("is-hidden");
-      if(!foundAntonyms[1]) {
+      if(!foundAntonyms[0]) {
         matches.perfect.antonym.appendChild(createListItemWithText("(none)"));
       } else {
         matches.partial.antonym.appendChild(createListItemWithText("(none)"));
@@ -202,8 +211,15 @@
   const messageText = document.getElementById("messageText");
 
   function handleSubmit(evt) {
+    // clean up prior results
     resultsDiv.classList.add("is-hidden");
     clearMatchesList();
+
+    // clear any prior errors
+    synonymInput.classList.remove("is-error");
+    rhymeInput.classList.remove("is-error");
+
+    // if input is valid, go find rhymonyms
     const synonymText = synonymInput.value.trim();
     const rhymeText = rhymeInput.value.trim();
     if(isValid(synonymText) && isValid(rhymeText)) {
@@ -225,6 +241,12 @@
     } else {
       messageText.textContent = "Please enter only one word in each box."
       messageDiv.classList.remove("is-hidden");
+      if(!isValid(synonymText)) {
+        synonymInput.classList.add("is-error");
+      }
+      if(!isValid(rhymeText)) {
+        rhymeInput.classList.add("is-error");
+      }
     }
   }
 

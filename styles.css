@@ -19,6 +19,12 @@ body {
   margin: 0 auto;
 }
 
+@media only screen and (max-width: 800px) {
+  .container {
+    width: 100%;
+  }
+}
+
 /* end container module */
 
 /* grid module */
@@ -34,6 +40,16 @@ body {
 
 .col-full {
   width: 100%;
+}
+
+@media only screen and (max-width: 800px) {
+  .row {
+    flex-wrap: wrap;
+  }
+  .col-1-2 {
+    width: 100%;
+    margin-bottom: 18px;
+  }
 }
 
 /* end grid module */
@@ -120,6 +136,43 @@ body {
 
 /* end results module */
 
+/* footer module */
+
+footer {
+  height: 100px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+footer p {
+  font-size: 0.75em;
+}
+
+@media only screen and (max-width: 800px) {
+  footer {
+    position: static;
+  }
+}
+
+@media only screen and (max-height: 600px) {
+  footer {
+    position: static;
+  }
+}
+
+/* end footer module */
+
+/* states */
+
 .is-hidden {
   display: none;
 }
+
+input.is-error {
+  border: 1px solid red;
+}
+
+/* end states */

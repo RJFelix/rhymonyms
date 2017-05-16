@@ -49,18 +49,22 @@
          let synonymList = [{word, isSynonym: true}]; // words mean the same thing as themselves!
          for(partOfSpeech in result) {
            // ignore part of speech, we want all synonyms
-           synonymList = synonymList.concat(result[partOfSpeech].syn)
-                                    .concat(result[partOfSpeech].usr)
-                                    .map(synonym => { return { word: synonym, isSynonym: true } }); // user suggestions - additional synonyms
-           if(result[partOfSpeech].ant) {
-             synonymList = synonymList.concat(
-                                        result[partOfSpeech].ant.map(antonym => {
-                                          return { word: antonym, isSynonym: false}
-                                          })
-                                      )
-           }
+           synonymList = synonymList.concat(result[partOfSpeech].syn
+                                      .map(word => { return { word, isSynonym: true}})
+                                    )
+          if(result[partOfSpeech].usr) {
+            synonymList = synonymList.concat(result[partOfSpeech].usr
+                                      .map(word => { return { word, isSynonym: true}})
+                                    );
+          }
+          if(result[partOfSpeech].ant) {
+            synonymList = synonymList.concat(result[partOfSpeech].ant
+                                       .map(word => { return { word, isSynonym: false}})
+                                     )
+          }
                                     
          }
+         console.log(JSON.stringify(synonymList));
          return synonymList;
        })
     )
@@ -84,6 +88,10 @@
   }
 
   function findWordsInCommon(synonymList, rhymeList) {
+
+    console.log(JSON.stringify(synonymList));
+    console.log(JSON.stringify(rhymeList));
+
     // synonyms may be phrases, but rhymes are not
     // extract the last word of each synonym or antonym
     const synonymLastWords = synonymList.map(synonym => /\S+$/.exec(synonym.word)[0]);

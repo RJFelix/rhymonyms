@@ -8,19 +8,35 @@
     <link rel="stylesheet" href="./styles.css" type="text/css">
   </head>
   <body>
-    <h1>Rhymonym</h1>
-    <hr>
-    <p>Find words that have a similar meaning to <input type="text" id="synonymInput"></input> but rhyme with <input type="text" id="rhymeInput"></input> !</p>
-    <button id="submit">Find words now!</button>
-    <hr>
-    <ul id="perfectSynonymMatches"></ul>
-    <hr>
-    <ul id="partialSynonymMatches"></ul>
-    <hr>
-    <ul id="perfectAntonymMatches"></ul>
-    <hr>
-    <ul id="partialAntonymMatches"></ul>
-    <!-- TODO: credit sources in footer -->
+    <div class="container">
+      <h1>Rhymonym</h1>
+      <hr>
+      <p>Find words that have a similar meaning to <input type="text" id="synonymInput"></input> but rhyme with <input type="text" id="rhymeInput"></input> !</p>
+      <button id="submit">Find words now!</button>
+      <hr>
+      <div class="row">
+        <div class="col-full">
+          <h2>Results</h2>
+        </div>
+      </div>
+      <div class="results row">
+        <div class="col-1-2">
+          <h3>Synonyms</h3>
+          <h4>Perfect Rhymes</h4>
+          <ul id="perfectSynonymMatches"></ul>
+          <h4>Partial Rhymes</h4>
+          <ul id="partialSynonymMatches"></ul>
+        </div>
+        <div class="col-1-2">
+          <h3>Antonyms</h3>
+          <h4>Perfect Rhymes</h4>
+          <ul id="perfectAntonymMatches"></ul>
+          <h4>Partial Rhymes</h4>
+          <ul id="partialAntonymMatches"></ul>
+        </div>
+      </div>
+      <!-- TODO: credit sources in footer -->
+    </div>
     <script type="text/javascript" src="./src/script.js"></script>
   </body>
 </html>

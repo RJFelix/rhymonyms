@@ -1,0 +1,42 @@
+/* base styles */
+
+body {
+  font-family: sans-serif;
+  background-color: #f9f9f9;
+  color: #333333;
+}
+
+/* end base styles */
+
+/* container module */
+
+.container {
+  width: 75%;
+  margin: 0 auto;
+}
+
+/* end container module */
+
+/* grid module */
+
+.row {
+  display: flex;
+}
+
+.col-1-2 {
+  width: 50%;
+}
+
+.col-full {
+  width: 100%;
+}
+
+/* end grid module */
+
+/* results module */
+
+.results ul {
+  list-style: none;
+}
+
+/* end results modele */

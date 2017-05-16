@@ -3,7 +3,16 @@
   const synonymInput = document.getElementById("synonymInput");
   const rhymeInput = document.getElementById("rhymeInput");
   const submitButton = document.getElementById("submit");
-  const matchesList = document.getElementById("matches");
+  const matches = {
+    perfect: {
+      synonym: document.getElementById("perfectSynonymMatches"),
+      antonym: document.getElementById("perfectAntonymMatches")
+    },
+    partial: {
+      synonym: document.getElementById("partialSynonymMatches"),
+      antonym: document.getElementById("partialAntonymMatches")
+    }
+  }
 
   // super unsafe!
   // to make it safe we'd have to build a simple backend
@@ -15,8 +24,14 @@
   const isValid = (text) => /^\S*$/.test(text);
 
   function clearMatchesList() {
-    while(matchesList.hasChildNodes()) {
-      matchesList.removeChild(matchesList.lastChild);
+    for(rhymeType in matches) {
+      for(wordType in matches[rhymeType]) {
+        while(matches[rhymeType][wordType].hasChildNodes()) {
+          matches[rhymeType][wordType].removeChild(
+            matches[rhymeType][wordType].lastChild
+          );
+        }
+      }
     }
   }
 
@@ -34,13 +49,22 @@
          }
        })
        .then(result => {
-         let wordList = [word]; // words mean the same thing as themselves!
+         let synonymList = [{word, isSynonym: true}]; // words mean the same thing as themselves!
          for(partOfSpeech in result) {
            // ignore part of speech, we want all synonyms
-           wordList = wordList.concat(result[partOfSpeech].syn);
-           // TODO: also track antonyms
+           synonymList = synonymList.concat(result[partOfSpeech].syn)
+                                    .concat(result[partOfSpeech].usr)
+                                    .map(synonym => { return { word: synonym, isSynonym: true } }); // user suggestions - additional synonyms
+           if(result[partOfSpeech].ant) {
+             synonymList = synonymList.concat(
+                                        result[partOfSpeech].ant.map(antonym => {
+                                          return { word: antonym, isSynonym: false}
+                                          })
+                                      )
+           }
+                                    
          }
-         return wordList;
+         return synonymList;
        })
     )
   }
@@ -56,23 +80,19 @@
          }
        })
        .then(results => {
-         // TODO: split partial rhymes from exact rhymes
-         return results.map(result => result.word)
-                       .concat(word) // words rhyme with themselves!
-         ;
+         return results.map(result => { return {word: result.word, isPerfect: result.score === 300} })
+                       .concat({word, isPerfect: true}); // words rhyme with themselves!
        })
     )
   }
 
-  // TODO: handle partial rhymes
-  // TODO: handle antonyms separately
-  function findWordsInCommon(synonyms, rhymes) {
+  function findWordsInCommon(synonymList, rhymeList) {
     // synonyms may be phrases, but rhymes are not
-    // extract the last word of each synonym
-    const synonymLastWords = synonyms.map(phrase => /\S+$/.exec(phrase)[0]);
+    // extract the last word of each synonym or antonym
+    const synonymLastWords = synonymList.map(synonym => /\S+$/.exec(synonym.word)[0]);
 
     const synonymSet = new Set(synonymLastWords);
-    const rhymeSet = new Set(rhymes);
+    const rhymeSet = new Set(rhymeList.map(rhyme => rhyme.word));
     
     // intersect the sets
     const wordsInCommonSet = new Set();
@@ -84,7 +104,16 @@
 
     // go back and make sure we include all
     // the matching synonyms, including phrases
-    return synonyms.filter(phrase => wordsInCommonSet.has(/\S+$/.exec(phrase)[0]));
+    // and also add perfect/partial rhyme info
+    return synonymList.filter(synonym => wordsInCommonSet.has(/\S+$/.exec(synonym.word)[0]))
+                      .map(synonym => {
+                        return {
+                          isPerfect: rhymeList.find(
+                            rhyme => rhyme.word === /\S+$/.exec(synonym.word)[0]
+                          ).isPerfect,
+                          ...synonym
+                        }
+                      });
   }
 
   const createListItemWithText = (text) => {
@@ -93,21 +122,27 @@
     return li;
   }
 
-  // TODO: display separately:
-  //       synonyms - full rhymes
-  //       synonyms - partial rhymes
-  //       antonyms - full rhymes
-  //       antonyms - partial rhymes
   function populateMatchesList(words) {
     if(words.length < 1) {
-      matchesList.appendChild(
+      matches.perfect.synonym.appendChild(
         createListItemWithText("No rhymonyms found, sorry.")
       )
     }
     words.forEach(word => {
-      matchesList.appendChild(
-        createListItemWithText(word)
-      );
+      const wordListItem = createListItemWithText(word.word);
+      if(word.isPerfect) {
+        if(word.isSynonym) {
+          matches.perfect.synonym.appendChild(wordListItem);
+        } else {
+          matches.perfect.antonym.appendChild(wordListItem);
+        }
+      } else {
+        if(word.isSynonym) {
+          matches.partial.synonym.appendChild(wordListItem);
+        } else {
+          matches.partial.antonym.appendChild(wordListItem);
+        }
+      }
     });
   }
 

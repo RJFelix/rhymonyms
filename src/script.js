@@ -197,28 +197,34 @@
   const isValid = (text) => /^\S*$/.test(text);
 
   const resultsDiv = document.querySelector(".results");
-  const inviteDiv = document.querySelector(".invite");
+  const messageDiv = document.querySelector(".message");
   const loadingDiv = document.querySelector(".loading");
+  const messageText = document.getElementById("messageText");
 
   function handleSubmit(evt) {
     resultsDiv.classList.add("is-hidden");
-    inviteDiv.classList.add("is-hidden");
-    loadingDiv.classList.remove("is-hidden");
     clearMatchesList();
     const synonymText = synonymInput.value.trim();
     const rhymeText = rhymeInput.value.trim();
     if(isValid(synonymText) && isValid(rhymeText)) {
-       Promise.all([fetchSynonyms(synonymText), fetchRhymes(rhymeText)])
-              .then(([synonyms, rhymes]) => findWordsInCommon(synonyms, rhymes))
-              .then(wordsInCommon => populateMatchesList(wordsInCommon))
-              .then(() => {
-                loadingDiv.classList.add("is-hidden");
-                resultsDiv.classList.remove("is-hidden");
-              })
-              .catch(reason => alert(reason));
-              // TODO: handle failure gracefully
+      messageDiv.classList.add("is-hidden");
+      loadingDiv.classList.remove("is-hidden");
+      Promise.all([fetchSynonyms(synonymText), fetchRhymes(rhymeText)])
+            .then(([synonyms, rhymes]) => findWordsInCommon(synonyms, rhymes))
+            .then(wordsInCommon => populateMatchesList(wordsInCommon))
+            .then(() => {
+              loadingDiv.classList.add("is-hidden");
+              resultsDiv.classList.remove("is-hidden");
+            })
+            .catch(reason => {
+              messageText.textContent = reason;
+              loadingDiv.classList.add("is-hidden");
+              resultsDiv.classList.add("is-hidden");
+              messageDiv.classList.remove("is-hidden");
+            });
     } else {
-      // TODO: feedback to user
+      messageText.textContent = "Please enter only one word in each box."
+      messageDiv.classList.remove("is-hidden");
     }
   }
 

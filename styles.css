@@ -38,16 +38,16 @@ body {
 
 /* end grid module */
 
-/* invite module */
+/* message module */
 
-.invite {
+.message {
   text-align: center;
 }
-.invite h3 {
+.message h3 {
   font-weight: normal;
 }
 
-/* end invite module */
+/* end message module */
 
 /* loading module */
 

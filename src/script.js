@@ -20,9 +20,6 @@
   // (no credit card is required to use their free tier so harm is limited)
   const BHL_API_KEY = "06a3f8e208a7b89744617022241cbd06";
 
-  // validation: must contain exactly one word, no whitespace
-  const isValid = (text) => /^\S*$/.test(text);
-
   function clearMatchesList() {
     for(rhymeType in matches) {
       for(wordType in matches[rhymeType]) {
@@ -145,6 +142,10 @@
       }
     });
   }
+
+
+  // validation: must contain exactly one word, no whitespace
+  const isValid = (text) => /^\S*$/.test(text);
 
   function handleSubmit(evt) {
     clearMatchesList();

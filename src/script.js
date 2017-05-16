@@ -117,6 +117,14 @@
                       });
   }
 
+  const foundSynonymsDiv = document.querySelector(".synonyms .found");
+  const notFoundSynonymsDiv = document.querySelector(".synonyms .not-found");
+  const foundAntonymsDiv = document.querySelector(".antonyms .found");
+  const notFoundAntonymsDiv = document.querySelector(".antonyms .not-found");
+  const noneFoundDiv = document.querySelector(".none-found");
+  const synonymsDiv = document.querySelector(".synonyms");
+  const antonymsDiv = document.querySelector(".antonyms");
+
   const createListItemWithText = (text) => {
     const li = document.createElement("li");
     li.appendChild(document.createTextNode(text));
@@ -125,14 +133,14 @@
 
   function populateMatchesList(words) {
     if(words.length < 1) {
-      document.querySelector(".none-found").classList.remove("is-hidden");
-      document.querySelector(".synonyms").classList.add("is-hidden");
-      document.querySelector(".antonyms").classList.add("is-hidden");
+      noneFoundDiv.classList.remove("is-hidden");
+      synonymsDiv.classList.add("is-hidden");
+      antonymsDiv.classList.add("is-hidden");
       return;
     } else {
-      document.querySelector(".none-found").classList.add("is-hidden");
-      document.querySelector(".synonyms").classList.remove("is-hidden");
-      document.querySelector(".antonyms").classList.remove("is-hidden");
+      noneFoundDiv.classList.add("is-hidden");
+      synonymsDiv.classList.remove("is-hidden");
+      antonymsDiv.classList.remove("is-hidden");
     }
     const foundSynonyms = [false, false]; // perfect, partial
     const foundAntonyms = [false, false]; // perfect, partial
@@ -156,11 +164,6 @@
         }
       }
     });
-
-    const foundSynonymsDiv = document.querySelector(".synonyms .found");
-    const notFoundSynonymsDiv = document.querySelector(".synonyms .not-found");
-    const foundAntonymsDiv = document.querySelector(".antonyms .found");
-    const notFoundAntonymsDiv = document.querySelector(".antonyms .not-found");
 
     if(!(foundSynonyms[0] || foundSynonyms[1])) {
       foundSynonymsDiv.classList.add("is-hidden");
@@ -193,10 +196,14 @@
   // validation: must contain exactly one word, no whitespace
   const isValid = (text) => /^\S*$/.test(text);
 
+  const resultsDiv = document.querySelector(".results");
+  const inviteDiv = document.querySelector(".invite");
+  const loadingDiv = document.querySelector(".loading");
+
   function handleSubmit(evt) {
-    document.querySelector(".results").classList.add("is-hidden");
-    document.querySelector(".invite").classList.add("is-hidden");
-    document.querySelector(".loading").classList.remove("is-hidden");
+    resultsDiv.classList.add("is-hidden");
+    inviteDiv.classList.add("is-hidden");
+    loadingDiv.classList.remove("is-hidden");
     clearMatchesList();
     const synonymText = synonymInput.value.trim();
     const rhymeText = rhymeInput.value.trim();
@@ -205,8 +212,8 @@
               .then(([synonyms, rhymes]) => findWordsInCommon(synonyms, rhymes))
               .then(wordsInCommon => populateMatchesList(wordsInCommon))
               .then(() => {
-                document.querySelector(".loading").classList.add("is-hidden");
-                document.querySelector(".results").classList.remove("is-hidden");
+                loadingDiv.classList.add("is-hidden");
+                resultsDiv.classList.remove("is-hidden");
               })
               .catch(reason => alert(reason));
               // TODO: handle failure gracefully

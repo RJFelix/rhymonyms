@@ -7,6 +7,7 @@ body {
   background: -webkit-linear-gradient(to left, #CFDEF3, #E0EAFC);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #CFDEF3, #E0EAFC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: #333333;
+  text-align: center;
 }
 
 /* end base styles */
@@ -98,9 +99,6 @@ body {
 .results ul {
   list-style: none;
   padding: 0;
-}
-
-.results ul > li {
 }
 
 .results > .synonyms,

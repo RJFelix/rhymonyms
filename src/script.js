@@ -125,26 +125,66 @@
 
   function populateMatchesList(words) {
     if(words.length < 1) {
-      matches.perfect.synonym.appendChild(
-        createListItemWithText("No rhymonyms found, sorry.")
-      )
+      document.querySelector(".none-found").classList.remove("is-hidden");
+      document.querySelector(".synonyms").classList.add("is-hidden");
+      document.querySelector(".antonyms").classList.add("is-hidden");
+      return;
+    } else {
+      document.querySelector(".none-found").classList.add("is-hidden");
+      document.querySelector(".synonyms").classList.remove("is-hidden");
+      document.querySelector(".antonyms").classList.remove("is-hidden");
     }
+    const foundSynonyms = [false, false]; // perfect, partial
+    const foundAntonyms = [false, false]; // perfect, partial
     words.forEach(word => {
       const wordListItem = createListItemWithText(word.word);
       if(word.isPerfect) {
         if(word.isSynonym) {
           matches.perfect.synonym.appendChild(wordListItem);
+          foundSynonyms[0] = true;
         } else {
           matches.perfect.antonym.appendChild(wordListItem);
+          foundAntonyms[0] = true;
         }
       } else {
         if(word.isSynonym) {
           matches.partial.synonym.appendChild(wordListItem);
+          foundSynonyms[1] = true;
         } else {
           matches.partial.antonym.appendChild(wordListItem);
+          foundAntonyms[1] = true;
         }
       }
     });
+
+    const foundSynonymsDiv = document.querySelector(".synonyms .found");
+    const notFoundSynonymsDiv = document.querySelector(".synonyms .not-found");
+    const foundAntonymsDiv = document.querySelector(".antonyms .found");
+    const notFoundAntonymsDiv = document.querySelector(".antonyms .not-found");
+
+    if(!(foundSynonyms[0] || foundSynonyms[1])) {
+      foundSynonymsDiv.classList.add("is-hidden");
+      notFoundSynonymsDiv.classList.remove("is-hidden");
+    } else {
+      notFoundSynonymsDiv.classList.add("is-hidden");
+      if(!foundSynonyms[0]) {
+        matches.perfect.synonym.appendChild(createListItemWithText("(none)"));
+      } else {
+        matches.partial.synonym.appendChild(createListItemWithText("(none)"));
+      }
+    }
+    if(!(foundAntonyms[0] || foundAntonyms[1])) {
+      foundAntonymsDiv.classList.add("is-hidden");
+      notFoundAntonymsDiv.classList.remove("is-hidden");
+    } else {
+      notFoundAntonymsDiv.classList.add("is-hidden");
+      if(!foundAntonyms[1]) {
+        matches.perfect.antonym.appendChild(createListItemWithText("(none)"));
+      } else {
+        matches.partial.antonym.appendChild(createListItemWithText("(none)"));
+      }
+    }
+
   }
 
 
@@ -152,14 +192,20 @@
   const isValid = (text) => /^\S*$/.test(text);
 
   function handleSubmit(evt) {
+    document.querySelector(".results").classList.add("is-hidden");
+    document.querySelector(".invite").classList.add("is-hidden");
+    document.querySelector(".loading").classList.remove("is-hidden");
     clearMatchesList();
-    // TODO: loading spinner or something
     const synonymText = synonymInput.value.trim();
     const rhymeText = rhymeInput.value.trim();
     if(isValid(synonymText) && isValid(rhymeText)) {
        Promise.all([fetchSynonyms(synonymText), fetchRhymes(rhymeText)])
               .then(([synonyms, rhymes]) => findWordsInCommon(synonyms, rhymes))
               .then(wordsInCommon => populateMatchesList(wordsInCommon))
+              .then(() => {
+                document.querySelector(".loading").classList.add("is-hidden");
+                document.querySelector(".results").classList.remove("is-hidden");
+              })
               .catch(reason => alert(reason));
               // TODO: handle failure gracefully
     } else {

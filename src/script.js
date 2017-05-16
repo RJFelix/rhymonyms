@@ -64,7 +64,6 @@
           }
                                     
          }
-         console.log(JSON.stringify(synonymList));
          return synonymList;
        })
     )
@@ -88,9 +87,6 @@
   }
 
   function findWordsInCommon(synonymList, rhymeList) {
-
-    console.log(JSON.stringify(synonymList));
-    console.log(JSON.stringify(rhymeList));
 
     // synonyms may be phrases, but rhymes are not
     // extract the last word of each synonym or antonym

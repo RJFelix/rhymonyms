@@ -1,5 +1,7 @@
 (function() {
 
+  "use strict";
+
   const synonymInput = document.getElementById("synonymInput");
   const rhymeInput = document.getElementById("rhymeInput");
   const submitButton = document.getElementById("submit");
@@ -21,8 +23,8 @@
   const BHL_API_KEY = "06a3f8e208a7b89744617022241cbd06";
 
   function clearMatchesList() {
-    for(rhymeType in matches) {
-      for(wordType in matches[rhymeType]) {
+    for(let rhymeType in matches) {
+      for(let wordType in matches[rhymeType]) {
         while(matches[rhymeType][wordType].hasChildNodes()) {
           matches[rhymeType][wordType].removeChild(
             matches[rhymeType][wordType].lastChild
@@ -47,7 +49,7 @@
        })
        .then(result => {
          let synonymList = [{word, isSynonym: true}]; // words mean the same thing as themselves!
-         for(partOfSpeech in result) {
+         for(let partOfSpeech in result) {
            // ignore part of speech, we want all synonyms
            synonymList = synonymList.concat(result[partOfSpeech].syn
                                       .map(word => { return { word, isSynonym: true}})
@@ -191,7 +193,7 @@
     }
     if(!(foundAntonyms[0] || foundAntonyms[1])) {
       foundAntonymsDiv.classList.add("is-hidden");
-      notFoundAntonymsDiv.classList.remove("is-hidden");
+      notFoundAntonymsDiv.classList.remove("is-hidden");``
     } else {
       foundAntonymsDiv.classList.remove("is-hidden");
       notFoundAntonymsDiv.classList.add("is-hidden");

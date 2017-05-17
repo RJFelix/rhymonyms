@@ -71,6 +71,9 @@
 
   function fetchRhymes(word) {
     return Promise.resolve(
+      // RhymeBrain API does not support HTTPS (wtf it's 2017 folks)
+      // CORS-anywhere proxies cross-origin requests to unsecure resources
+      // CORS-anywhere source: https://github.com/Rob--W/cors-anywhere/
       fetch(`https://cors-anywhere.herokuapp.com/http://rhymebrain.com/talk?function=getRhymes&word=${word}`)
        .then(response => {
          if(response.ok) {

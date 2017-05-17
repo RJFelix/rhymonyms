@@ -34,12 +34,12 @@
 
   function fetchSynonyms(word) {
     return Promise.resolve(
-      fetch(`http://words.bighugelabs.com/api/2/${BHL_API_KEY}/${word}/json`)
+      fetch(`https://words.bighugelabs.com/api/2/${BHL_API_KEY}/${word}/json`)
        .then(response => {
          if(response.ok) {
            return response.json();
          } else if (response.status === 303) { // alternate word, per API documentation
-           return fetch(`http://words.bighugelabs.com/api/2/${BHL_API_KEY}/${response.statusText}`)
+           return fetch(`https://words.bighugelabs.com/api/2/${BHL_API_KEY}/${response.statusText}`)
                    .then(response => response.json());
          } else {
            throw `Could not access thesaurus. Reason: ${response.statusText}`;
@@ -71,7 +71,7 @@
 
   function fetchRhymes(word) {
     return Promise.resolve(
-      fetch(`http://rhymebrain.com/talk?function=getRhymes&word=${word}`)
+      fetch(`https://rhymebrain.com/talk?function=getRhymes&word=${word}`)
        .then(response => {
          if(response.ok) {
            return response.json();

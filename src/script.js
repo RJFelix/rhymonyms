@@ -71,7 +71,7 @@
 
   function fetchRhymes(word) {
     return Promise.resolve(
-      fetch(`https://rhymebrain.com/talk?function=getRhymes&word=${word}`)
+      fetch(`https://cors-anywhere.herokuapp.com/http://rhymebrain.com/talk?function=getRhymes&word=${word}`)
        .then(response => {
          if(response.ok) {
            return response.json();
